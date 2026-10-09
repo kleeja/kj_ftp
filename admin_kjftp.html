@@ -1,156 +1,257 @@
+<div class="kj-page-header">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="./">{lang.R_CPINDEX}</a></li>
+                <IF NAME="kj_ftp_tab_test">
+                <li class="breadcrumb-item"><a href="{action}">{olang.R_KJ_FTP_OPTIONS}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{olang.KJ_FTP_TAB_TEST}</li>
+                <ELSE>
+                <li class="breadcrumb-item active" aria-current="page">{olang.R_KJ_FTP_OPTIONS}</li>
+                </IF>
+            </ol>
+        </nav>
+        <h1 class="kj-page-title">{olang.R_KJ_FTP_OPTIONS}</h1>
+    </div>
+    <div class="kj-page-actions">
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kj_ftp_add">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{olang.KJ_FTP_ADD_NEW_ACCOUNT}</span>
+        </button>
+    </div>
+</div>
 
+<IF NAME="kj_ftp_no_extension">
+<div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+    <i class="fa-solid fa-triangle-exclamation kj-alert-icon" aria-hidden="true"></i>
+    <div>{olang.KJ_FTP_NO_EXTENSION}</div>
+</div>
+</IF>
 
-<!-- Breadcrumbs -->
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="./">{lang.R_CPINDEX}</a></li>
-    <li class="breadcrumb-item">{olang.R_KJ_FTP_OPTIONS}</li>
-</ol>
-
-<a href="#" class="btn btn-primary pull-(lang.DIR==ltr?right:left)" data-toggle="modal" data-target="#account_add_new">
-    <i class="fa fa-plus-circle"></i> {olang.KJ_FTP_ADD_NEW_ACCOUNT}
-</a>
-<div class="clearfix"></div>
-
-
-<div id="accordion" class="mt-3" role="tablist" aria-multiselectable="true">
-
-<LOOP NAME="ftp_accounts">
-
-    <div class="card mb-3">
-        <div class="card-header" role="tab" id="heading{{id}}">
-            <h5 class="mb-0">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{id}}" aria-expanded="true" aria-controls="collapse{{id}}" style="text-decoration: none">
-                   <IF LOOP="active">
-                       <i class="fa fa-check text-success" title="{olang.KJ_FTP_OPT_ACTIVE}" data-toggle="tooltip"></i>
-                   <ELSE>
-                       <i class="fa fa-pause-circle text-gray-dark"></i>
-                   </IF>
-                    <small class="badge badge-pill badge-dark">{{name}}</small>  {{host}}
+<!-- the accounts and the connection test are the tabs of the card -->
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link<IF NAME="kj_ftp_tab_test"><ELSE> active</IF>" href="{action}"<IF NAME="kj_ftp_tab_test"><ELSE> aria-current="page"</IF>>
+                    <i class="fa-solid fa-server me-1" aria-hidden="true"></i>{olang.KJ_FTP_TAB_ACCOUNTS}
                 </a>
-            </h5>
-        </div>
-
-        <div id="collapse{{id}}" class="collapse " role="tabpanel" aria-labelledby="heading{{id}}">
-            <div class="card-body">
-
-                <!-- edit form -->
-                <form method="post" action="{action}">
-
-                    <input type="hidden" value="{{id}}" name="id">
-
-                    <div class="form-group">
-                        <label for="name">{olang.KJ_FTP_OPT_NAME}</label>
-                        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="" value="{{name}}">
-                        <small id="nameHelp" class="form-text text-muted">{olang.KJ_FTP_OPT_NAME_HELP}</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="host">{olang.KJ_FTP_OPT_HOST}</label>
-                        <input type="text" class="form-control" name="host" id="host" placeholder="" aria-describedby="hostHelp" value="{{host}}">
-                        <small id="hostHelp" class="form-text text-muted">{olang.KJ_FTP_OPT_HOST_HELP}</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">{olang.KJ_FTP_OPT_USERNAME}</label>
-                        <input type="text" class="form-control" name="username" id="username" placeholder="" value="{{username}}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">{olang.KJ_FTP_OPT_PASSWORD}</label>
-                        <input type="text" class="form-control" name="password" id="password" placeholder="" value="">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="port">{olang.KJ_FTP_OPT_PORT}</label>
-                        <input type="text" class="form-control" name="port" id="port" placeholder="" value="{{port}}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="root">{olang.KJ_FTP_OPT_ROOT}</label>
-                        <input type="text" class="form-control" name="root" id="root" placeholder="" value="{{root}}">
-                        <small id="rootHelp" class="form-text text-muted">{olang.KJ_FTP_OPT_ROOT_HELP}</small>
-
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="link">{olang.KJ_FTP_OPT_LINK}</label>
-                        <input type="text" class="form-control" name="link" id="link" placeholder="" value="{{link}}">
-                        <small id="linkHelp" class="form-text text-muted">{olang.KJ_FTP_OPT_LINK_HELP}</small>
-                    </div>
-
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="passive"<IF LOOP="passive"> checked="checked"</IF>>
-                            Passive
-                        </label>
-
-                        <small id="passiveHelp" class="form-text text-muted">{olang.KJ_FTP_OPT_PASSIVE_HELP}</small>
-
-                    </div>
-
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="active"<IF LOOP="active"> checked="checked"</IF>>
-                            {olang.KJ_FTP_OPT_ACTIVE}
-                        </label>
-
-                        <small id="activeHelp" class="form-text text-muted">{olang.KJ_FTP_OPT_ACTIVE_HELP}</small>
-
-                    </div>
-
-
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="ssl"<IF LOOP="ssl"> checked="checked"</IF>>
-                            SSL
-                        </label>
-                    </div>
-
-                    <input type="submit" name="submit" class="btn btn-primary mt-2" value="{lang.UPDATE}">
-                    <input type="hidden" name="type" value="edit">
-
-                    {H_FORM_KEYS}
-
-                </form>
-                <!-- end edit form-->
-
-            </div>
-        </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link<IF NAME="kj_ftp_tab_test"> active</IF>" href="{kj_ftp_test_url}"<IF NAME="kj_ftp_tab_test"> aria-current="page"</IF>>
+                    <i class="fa-solid fa-stethoscope me-1" aria-hidden="true"></i>{olang.KJ_FTP_TAB_TEST}
+                </a>
+            </li>
+        </ul>
     </div>
 
-</LOOP>
-</div>
+    <div class="card-body">
 
+<IF NAME="kj_ftp_tab_test">
 
+        <p class="text-body-secondary">{olang.KJ_FTP_TEST_INTRO}</p>
 
-<!-- new account modal -->
-<div id="account_add_new" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewAccount" aria-hidden="true">
+        <IF NAME="ftp_accounts">
+        <form method="post" action="{kj_ftp_test_url}" class="row g-2 align-items-end">
+            <div class="col-sm-8 col-lg-6">
+                <label class="form-label" for="kj_ftp_test_account">{olang.KJ_FTP_TEST_ACCOUNT}</label>
+                <select class="form-select" id="kj_ftp_test_account" name="id">
+                    <LOOP NAME="ftp_accounts">
+                    <option value="{{id}}"<IF LOOP="selected"> selected</IF>>{{host}}:{{port}} · {{name}}<IF LOOP="active"><ELSE> ({olang.KJ_FTP_STATUS_INACTIVE})</IF></option>
+                    </LOOP>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" name="submit" value="1" class="btn btn-primary">
+                    <i class="fa-solid fa-play" aria-hidden="true"></i><span>{olang.KJ_FTP_TEST_RUN}</span>
+                </button>
+            </div>
+            <input type="hidden" name="type" value="test">
+            {H_FORM_KEYS}
+        </form>
+        <ELSE>
+        <div class="alert alert-info d-flex align-items-start gap-2 mb-0" role="status">
+            <i class="fa-solid fa-circle-info kj-alert-icon" aria-hidden="true"></i>
+            <div>{olang.KJ_FTP_TEST_NEEDS_ACCOUNT}</div>
+        </div>
+        </IF>
 
-    <form method="post" action="{action}" id="add_account_form">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addNewAccount">{olang.KJ_FTP_ADD_NEW_ACCOUNT}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <IF NAME="kj_ftp_test_steps">
+        <!-- the steps of the test, each one says what it found, and how to fix it -->
+        <h2 class="kj-section-title">{kj_ftp_test_title}</h2>
+
+        <div class="alert alert-{kj_ftp_test_status} d-flex align-items-start gap-2" role="status">
+            <i class="fa-solid <IF NAME="kj_ftp_test_status == success">fa-circle-check<ELSEIF NAME="kj_ftp_test_status == warning">fa-triangle-exclamation<ELSE>fa-circle-xmark</IF> kj-alert-icon" aria-hidden="true"></i>
+            <div>{kj_ftp_test_summary}</div>
+        </div>
+
+        <ul class="list-group">
+            <LOOP NAME="kj_ftp_test_steps">
+            <IF LOOP="group">
+            <li class="list-group-item bg-body-tertiary small fw-semibold text-body-secondary">{{group}}</li>
+            </IF>
+            <li class="list-group-item d-flex align-items-start gap-3 py-3">
+                <i class="fa-solid fa-{{icon}} text-{{color}} fs-5 flex-shrink-0 mt-1" aria-hidden="true"></i>
+                <div class="flex-grow-1" style="min-width: 0">
+                    <div class="fw-semibold">{{title}}</div>
+                    <div class="small text-break">{{detail}}</div>
+                    <IF LOOP="hint">
+                    <div class="small text-body-secondary text-break mt-2 ps-2 border-start border-3 border-{{color}}">
+                        <i class="fa-regular fa-lightbulb me-1" aria-hidden="true"></i>{{hint}}
+                    </div>
+                    </IF>
                 </div>
-                <div class="modal-body">
+            </li>
+            </LOOP>
+        </ul>
+        </IF>
 
-                    <div class="alert alert-info">
-                    {olang.KJ_FTP_ADD_NEW_ACCOUNT_EXP}
+<ELSE>
+
+        <IF NAME="ftp_accounts">
+
+        <IF NAME="kj_ftp_no_active">
+        <div class="alert alert-info d-flex align-items-start gap-2" role="status">
+            <i class="fa-solid fa-circle-info kj-alert-icon" aria-hidden="true"></i>
+            <div>{olang.KJ_FTP_NO_ACTIVE_ACCOUNTS}</div>
+        </div>
+        </IF>
+
+    <!-- the accounts, each one opens on its form -->
+    <div class="accordion" id="kj_ftp_accounts">
+        <LOOP NAME="ftp_accounts">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="kj_ftp_heading_{{id}}">
+                <button class="accordion-button<IF LOOP="open"><ELSE> collapsed</IF>" type="button" data-bs-toggle="collapse" data-bs-target="#kj_ftp_account_{{id}}" aria-expanded="<IF LOOP="open">true<ELSE>false</IF>" aria-controls="kj_ftp_account_{{id}}">
+                    <span class="d-flex flex-wrap align-items-center gap-2" style="min-width: 0">
+                        <IF LOOP="active">
+                        <span class="kj-badge is-success"><i class="fa-solid fa-circle-check" aria-hidden="true"></i>{olang.KJ_FTP_STATUS_ACTIVE}</span>
+                        <ELSE>
+                        <span class="kj-badge is-neutral"><i class="fa-solid fa-circle-pause" aria-hidden="true"></i>{olang.KJ_FTP_STATUS_INACTIVE}</span>
+                        </IF>
+                        <span class="fw-semibold text-break" dir="ltr">{{host}}:{{port}}</span>
+                        <IF LOOP="ssl"><i class="fa-solid fa-lock text-body-secondary" title="{olang.KJ_FTP_OPT_SSL}" aria-hidden="true"></i><span class="visually-hidden">{olang.KJ_FTP_OPT_SSL}</span></IF>
+                        <code class="small" dir="ltr">{{name}}</code>
+                    </span>
+                </button>
+            </h2>
+            <div id="kj_ftp_account_{{id}}" class="accordion-collapse collapse<IF LOOP="open"> show</IF>" aria-labelledby="kj_ftp_heading_{{id}}" data-bs-parent="#kj_ftp_accounts">
+                <form method="post" action="{action}" class="accordion-body" autocomplete="off">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="kj_ftp_host_{{id}}">{olang.KJ_FTP_OPT_HOST}</label>
+                            <input type="text" class="form-control" id="kj_ftp_host_{{id}}" name="host" value="{{host}}" dir="ltr" required aria-describedby="kj_ftp_host_hint_{{id}}">
+                            <div class="form-text" id="kj_ftp_host_hint_{{id}}">{olang.KJ_FTP_OPT_HOST_HELP}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="kj_ftp_port_{{id}}">{olang.KJ_FTP_OPT_PORT}</label>
+                            <input type="number" class="form-control" id="kj_ftp_port_{{id}}" name="port" value="{{port}}" min="1" max="65535" dir="ltr">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="kj_ftp_username_{{id}}">{olang.KJ_FTP_OPT_USERNAME}</label>
+                            <input type="text" class="form-control" id="kj_ftp_username_{{id}}" name="username" value="{{username}}" dir="ltr" autocomplete="off">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="kj_ftp_password_{{id}}">{olang.KJ_FTP_OPT_PASSWORD}</label>
+                            <input type="password" class="form-control" id="kj_ftp_password_{{id}}" name="password" value="" dir="ltr" autocomplete="new-password" aria-describedby="kj_ftp_password_hint_{{id}}">
+                            <div class="form-text" id="kj_ftp_password_hint_{{id}}">{olang.KJ_FTP_OPT_PASSWORD_HELP}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="kj_ftp_root_{{id}}">{olang.KJ_FTP_OPT_ROOT}</label>
+                            <input type="text" class="form-control" id="kj_ftp_root_{{id}}" name="root" value="{{root}}" dir="ltr" aria-describedby="kj_ftp_root_hint_{{id}}">
+                            <div class="form-text" id="kj_ftp_root_hint_{{id}}">{olang.KJ_FTP_OPT_ROOT_HELP}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="kj_ftp_link_{{id}}">{olang.KJ_FTP_OPT_LINK}</label>
+                            <input type="url" class="form-control" id="kj_ftp_link_{{id}}" name="link" value="{{link}}" dir="ltr" placeholder="https://" aria-describedby="kj_ftp_link_hint_{{id}}">
+                            <div class="form-text" id="kj_ftp_link_hint_{{id}}">{olang.KJ_FTP_OPT_LINK_HELP}</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="kj_ftp_name_{{id}}">{olang.KJ_FTP_OPT_NAME}</label>
+                            <input type="text" class="form-control" id="kj_ftp_name_{{id}}" name="name" value="{{name}}" dir="ltr" maxlength="20" pattern="[A-Za-z0-9_\-]+" required aria-describedby="kj_ftp_name_hint_{{id}}">
+                            <div class="form-text" id="kj_ftp_name_hint_{{id}}">{olang.KJ_FTP_OPT_NAME_HELP}</div>
+                        </div>
                     </div>
 
+                    <div class="row g-3 mt-1">
+                        <div class="col-lg-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="kj_ftp_active_{{id}}" name="active" value="1"<IF LOOP="active"> checked</IF> aria-describedby="kj_ftp_active_hint_{{id}}">
+                                <label class="form-check-label fw-semibold" for="kj_ftp_active_{{id}}">{olang.KJ_FTP_OPT_ACTIVE}</label>
+                            </div>
+                            <div class="form-text mt-0" id="kj_ftp_active_hint_{{id}}">{olang.KJ_FTP_OPT_ACTIVE_HELP}</div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="kj_ftp_ssl_{{id}}" name="ssl" value="1"<IF LOOP="ssl"> checked</IF> aria-describedby="kj_ftp_ssl_hint_{{id}}">
+                                <label class="form-check-label fw-semibold" for="kj_ftp_ssl_{{id}}">{olang.KJ_FTP_OPT_SSL}</label>
+                            </div>
+                            <div class="form-text mt-0" id="kj_ftp_ssl_hint_{{id}}">{olang.KJ_FTP_OPT_SSL_HELP}</div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="kj_ftp_passive_{{id}}" name="passive" value="1"<IF LOOP="passive"> checked</IF> aria-describedby="kj_ftp_passive_hint_{{id}}">
+                                <label class="form-check-label fw-semibold" for="kj_ftp_passive_{{id}}">{olang.KJ_FTP_OPT_PASSIVE}</label>
+                            </div>
+                            <div class="form-text mt-0" id="kj_ftp_passive_hint_{{id}}">{olang.KJ_FTP_OPT_PASSIVE_HELP}</div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="id" value="{{id}}">
+                    <input type="hidden" name="type" value="edit">
                     {H_FORM_KEYS}
 
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="type" value="new">
-                    <input type="submit" name="submit" class="btn btn-primary" value="{lang.YES}">
-                </div>
+                    <div class="d-flex flex-wrap justify-content-end gap-2 border-top pt-3 mt-4">
+                        <a class="btn btn-outline-secondary" href="{kj_ftp_test_run_url}{{id}}">
+                            <i class="fa-solid fa-stethoscope" aria-hidden="true"></i><span>{olang.KJ_FTP_TEST_BUTTON}</span>
+                        </a>
+                        <button type="submit" name="submit" value="1" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i><span>{lang.UPDATE}</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+        </LOOP>
+    </div>
+
+        <ELSE>
+
+        <!-- no accounts yet -->
+        <div class="text-center py-5">
+            <span class="kj-icon-tile mb-3"><i class="fa-solid fa-server" aria-hidden="true"></i></span>
+            <h2 class="h5 fw-semibold">{olang.KJ_FTP_NO_ACCOUNTS}</h2>
+            <p class="text-body-secondary mx-auto" style="max-width: 32rem">{olang.KJ_FTP_NO_ACCOUNTS_EXP}</p>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kj_ftp_add">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{olang.KJ_FTP_ADD_NEW_ACCOUNT}</span>
+            </button>
+        </div>
+
+        </IF>
+
+</IF>
+
+    </div>
 </div>
-<!-- end new account modal -->
+
+<!-- new account -->
+<div id="kj_ftp_add" class="modal fade" tabindex="-1" aria-labelledby="kj_ftp_add_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{action}" class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="kj_ftp_add_title">{olang.KJ_FTP_ADD_NEW_ACCOUNT}</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{lang.CLOSE}"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">{olang.KJ_FTP_ADD_NEW_ACCOUNT_EXP}</p>
+                <input type="hidden" name="type" value="new">
+                {H_FORM_KEYS}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{lang.CLOSE}</button>
+                <button type="submit" name="submit" value="1" class="btn btn-primary">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{olang.KJ_FTP_ADD_NEW_ACCOUNT}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
