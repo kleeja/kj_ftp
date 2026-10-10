@@ -86,7 +86,7 @@ class kleeja_ftp
 
         $this->root = rtrim(trim($rootPath), '/');
 
-        if ($this->root != '' && !$this->is_dir('')) {
+        if ($this->root !== '' && !$this->is_dir('')) {
             $this->create_folder('');
         }
 
@@ -155,11 +155,11 @@ class kleeja_ftp
     {
         $path = trim($path, '/');
 
-        if ($this->root == '') {
-            return $path == '' ? '.' : $path;
+        if ($this->root === '') {
+            return $path === '' ? '.' : $path;
         }
 
-        return $this->root . ($path == '' ? '' : '/' . $path);
+        return $this->root . ($path === '' ? '' : '/' . $path);
     }
 
     /**

@@ -20,8 +20,8 @@ $kj_ftp_test_url = $action . '&amp;case=test';
 $kj_ftp_test_run_url = $kj_ftp_test_url . '&amp;' . kleeja_add_form_key_get('adm_kj_ftp_test') . '&amp;account=';
 
 // the tabs: the accounts, and the connection test
-$kj_ftp_run_test = (ip('submit') && p('type') == 'test') || (g('case') == 'test' && ig('formkey'));
-$kj_ftp_tab_test = g('case') == 'test' || $kj_ftp_run_test;
+$kj_ftp_run_test = (ip('submit') && p('type') === 'test') || (g('case') === 'test' && ig('formkey'));
+$kj_ftp_tab_test = g('case') === 'test' || $kj_ftp_run_test;
 
 // the accounts have the passwords of the FTP servers, only a founder sees them
 if ((int) $userinfo['founder'] !== 1) {
@@ -106,7 +106,7 @@ if ($kj_ftp_run_test) {
     /**
      * add an account, inactive, its details are entered after it
      */
-    if (p('type') == 'new') {
+    if (p('type') === 'new') {
         $insert_query = [
             'INSERT' => '`name`, `host`, `active`',
             'INTO' => "{$dbprefix}kj_ftp_info",

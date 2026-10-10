@@ -261,8 +261,8 @@ $kleeja_plugin['kj_ftp']['functions'] = [
         $pid = $args['pid'];
 
         if (
-            !(($pid == 'image' || $pid == 'thumb') && $config['id_form_img'] == 'direct') &&
-            !($pid == 'file' && $config['id_form'] == 'direct')
+            !(($pid === 'image' || $pid === 'thumb') && $config['id_form_img'] === 'direct') &&
+            !($pid === 'file' && $config['id_form'] === 'direct')
         ) {
             return;
         }
@@ -576,7 +576,7 @@ if (!function_exists('kj_ftp_create_table')) {
 
         $parts = explode(':', substr($path, $start + 6), 2);
 
-        if (count($parts) != 2 || $parts[0] === '') {
+        if (count($parts) !== 2 || $parts[0] === '') {
             return null;
         }
 
@@ -701,9 +701,9 @@ if (!function_exists('kj_ftp_create_table')) {
         $prefix = 'KJ_FTP_HELP_' . $name;
         $section = ['type' => $type, 'title' => $words[$prefix . '_TITLE'] ?? '', 'items' => []];
 
-        for ($n = 1; isset($words[$prefix . ($type == 'faq' ? '_Q_' : '_') . $n]); $n++) {
+        for ($n = 1; isset($words[$prefix . ($type === 'faq' ? '_Q_' : '_') . $n]); $n++) {
             $section['items'][] =
-                $type == 'faq'
+                $type === 'faq'
                     ? ['q' => $words[$prefix . '_Q_' . $n], 'a' => $words[$prefix . '_A_' . $n] ?? '']
                     : $words[$prefix . '_' . $n];
         }
@@ -1180,8 +1180,8 @@ if (!function_exists('getKleejaFtpAccountInstance')) {
                 kleeja_html_decode($ftp_account['password']),
                 (int) $ftp_account['port'],
                 kleeja_html_decode($ftp_account['root']),
-                (int) $ftp_account['passive'] == 1,
-                (int) $ftp_account['ssl'] == 1,
+                (int) $ftp_account['passive'] === 1,
+                (int) $ftp_account['ssl'] === 1,
                 (int) $ftp_account['timeout'],
             );
 
@@ -1227,15 +1227,15 @@ if (!function_exists('getKleejaFtpLink')) {
     {
         $ftp_account = getKleejaFtpAccount($uniqueName);
 
-        if ($ftp_account == false) {
+        if ($ftp_account === false) {
             return '';
         }
 
         $link = trim(kleeja_html_decode($ftp_account['link'] ?? ''));
 
-        if ($link == '') {
+        if ($link === '') {
             $root = trim(kleeja_html_decode($ftp_account['root'] ?? ''), '/ ');
-            $link = 'http://' . trim(kleeja_html_decode($ftp_account['host'])) . ($root == '' ? '' : '/' . $root);
+            $link = 'http://' . trim(kleeja_html_decode($ftp_account['host'])) . ($root === '' ? '' : '/' . $root);
         }
 
         // the names are kept encoded for HTML, each part of the path is encoded for the link

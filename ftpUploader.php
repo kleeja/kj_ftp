@@ -304,7 +304,7 @@ class ftpUploader implements KleejaUploader
         if (isset($_SESSION['FIILES_NOT_DUPLI'])) {
             if (
                 !empty($_SESSION['FIILES_NOT_DUPLI']) &&
-                $_SESSION['FIILES_NOT_DUPLI'] == sha1(serialize(array_column($_FILES, 'name')))
+                $_SESSION['FIILES_NOT_DUPLI'] === sha1(serialize(array_column($_FILES, 'name')))
             ) {
                 unset($_SESSION['FIILES_NOT_DUPLI']);
 
@@ -365,7 +365,7 @@ class ftpUploader implements KleejaUploader
         }
 
         // well, no file uploaded, ask user to choose a file before submit
-        if ($this->total_uploaded_files == 0 && sizeof($this->messages) == 0) {
+        if ($this->total_uploaded_files === 0 && sizeof($this->messages) === 0) {
             $this->addErrorMessage($lang['CHOSE_F']);
         }
     }
@@ -445,7 +445,7 @@ class ftpUploader implements KleejaUploader
         // now, let process it
         if (!in_array(strtolower($fileInfo['fileExtension']), array_keys($this->getAllowedFileExtensions()))) {
             // guest
-            if ($current_user_id == '-1') {
+            if ($current_user_id === -1) {
                 $this->addErrorMessage(
                     sprintf($lang['FORBID_EXT'], $fileInfo['fileExtension']) .
                         '<br> <a href="' .
@@ -469,7 +469,7 @@ class ftpUploader implements KleejaUploader
             );
         }
         // check file extension for bad stuff
-        elseif (ext_check_safe($_FILES['file_' . $fieldNumber . '_']['name']) == false) {
+        elseif (ext_check_safe($_FILES['file_' . $fieldNumber . '_']['name']) === false) {
             $this->addErrorMessage(
                 sprintf($lang['WRONG_F_NAME'], htmlspecialchars($_FILES['file_' . $fieldNumber . '_']['name'])),
             );
@@ -480,7 +480,7 @@ class ftpUploader implements KleejaUploader
                 $_FILES['file_' . $fieldNumber . '_']['type'],
                 $fileInfo['fileExtension'],
                 $_FILES['file_' . $fieldNumber . '_']['tmp_name'],
-            ) == false
+            ) === false
         ) {
             $this->addErrorMessage(
                 sprintf($lang['NOT_SAFE_FILE'], htmlspecialchars($_FILES['file_' . $fieldNumber . '_']['name'])),
@@ -522,7 +522,7 @@ class ftpUploader implements KleejaUploader
                     $current_uploading_folder . '/thumbs/' . $fileInfo['generatedFileName'],
                 );
 
-                if ($config['write_imgs'] != 0) {
+                if ((int) $config['write_imgs'] !== 0) {
                     $this->generateWatermark($localFile, $fileInfo['fileExtension']);
                 }
             }

@@ -126,7 +126,7 @@ class kj_ftp_test
                     $this->check_rmdir();
                 }
 
-                if (!isset($this->results['root']) || $this->results['root'][0] != 'error') {
+                if (!isset($this->results['root']) || $this->results['root'][0] !== 'error') {
                     $this->check_folder();
                 }
             }
@@ -148,14 +148,14 @@ class kj_ftp_test
 
         foreach (self::STEPS as $key => [$step_group, $title]) {
             // the FTPS of PHP matters only for an account that uses it
-            if ($key == 'php_tls' && !isset($this->results[$key])) {
+            if ($key === 'php_tls' && !isset($this->results[$key])) {
                 continue;
             }
 
             [$status, $detail, $hint] = $this->results[$key] ?? ['skipped', $this->word('KJ_FTP_TEST_SKIPPED'), ''];
 
             $steps[] = [
-                'group' => $step_group != $group ? $this->word('KJ_FTP_TEST_GROUP_' . strtoupper($step_group)) : '',
+                'group' => $step_group !== $group ? $this->word('KJ_FTP_TEST_GROUP_' . strtoupper($step_group)) : '',
                 'title' => $this->word($title),
                 'status' => $status,
                 'detail' => $detail,
@@ -243,7 +243,7 @@ class kj_ftp_test
         $port = $this->account['port'];
 
         // the placeholder of a new account
-        if ($host === '' || $host == 'example.com') {
+        if ($host === '' || $host === 'example.com') {
             $this->add('dns', 'error', $this->word('KJ_FTP_TEST_HOST_EXAMPLE'), $this->word('KJ_FTP_TEST_DNS_HINT'));
 
             return false;
@@ -295,7 +295,7 @@ class kj_ftp_test
                     sprintf($this->word('KJ_FTP_TEST_PORT_REFUSED'), $port),
                     $this->word('KJ_FTP_TEST_PORT_REFUSED_HINT'),
                 );
-            } elseif (stripos($errstr, 'timed out') !== false || $errno == 110) {
+            } elseif (stripos($errstr, 'timed out') !== false || $errno === 110) {
                 $this->add(
                     'port',
                     'error',
@@ -316,7 +316,7 @@ class kj_ftp_test
 
         [$code, $greeting] = $this->reply($socket);
 
-        if ($code != 220) {
+        if ($code !== 220) {
             fclose($socket);
 
             if (stripos($greeting, 'SSH-') === 0) {
@@ -338,7 +338,7 @@ class kj_ftp_test
                     'port',
                     'error',
                     sprintf($this->word('KJ_FTP_TEST_PORT_SILENT'), $port),
-                    $this->word($port == 990 ? 'KJ_FTP_TEST_PORT_IMPLICIT_HINT' : 'KJ_FTP_TEST_PORT_SILENT_HINT'),
+                    $this->word($port === 990 ? 'KJ_FTP_TEST_PORT_IMPLICIT_HINT' : 'KJ_FTP_TEST_PORT_SILENT_HINT'),
                 );
             }
 
@@ -361,7 +361,7 @@ class kj_ftp_test
         [$code, $answer] = $this->reply($socket);
         $tls = '';
 
-        if ($code == 234) {
+        if ($code === 234) {
             $method = defined('STREAM_CRYPTO_METHOD_TLS_ANY_CLIENT')
                 ? STREAM_CRYPTO_METHOD_TLS_ANY_CLIENT
                 : STREAM_CRYPTO_METHOD_TLS_CLIENT;
@@ -378,7 +378,7 @@ class kj_ftp_test
         fclose($socket);
 
         if ($this->account['ssl']) {
-            if ($code != 234) {
+            if ($code !== 234) {
                 $this->add(
                     'tls',
                     'error',
@@ -699,7 +699,7 @@ class kj_ftp_test
 
         [$status, $body, $error_kind, $error] = $response;
 
-        if ($error_kind == 'tls') {
+        if ($error_kind === 'tls') {
             $this->add(
                 'link',
                 'error',
@@ -714,16 +714,16 @@ class kj_ftp_test
                 sprintf($this->word('KJ_FTP_TEST_LINK_UNREACHABLE'), $this->code($url), $this->code($error)),
                 $this->word('KJ_FTP_TEST_LINK_UNREACHABLE_HINT'),
             );
-        } elseif ($status == 200 && $body === file_get_contents(__DIR__ . '/icon.png')) {
+        } elseif ($status === 200 && $body === file_get_contents(__DIR__ . '/icon.png')) {
             $this->add('link', 'ok', sprintf($this->word('KJ_FTP_TEST_LINK_OK'), $this->code($url)));
-        } elseif ($status == 200) {
+        } elseif ($status === 200) {
             $this->add(
                 'link',
                 'error',
                 sprintf($this->word('KJ_FTP_TEST_LINK_WRONG_FILE'), $this->code($url)),
                 $wrong_link_hint,
             );
-        } elseif ($status == 401 || $status == 403) {
+        } elseif ($status === 401 || $status === 403) {
             $this->add(
                 'link',
                 'error',
